@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2 style="margin-top: 0;">Top 10 recomendaciones</h2>
+  <p class="muted">Basadas en tus 20 valoraciones iniciales.</p>
+
+  <div class="grid">
+    {% for rec in recommendations %}
+      {% set movie = rec[0] %}
+      {% set score = rec[1] %}
+      {% set detail = rec[2] %}
+      <div class="rec-card" data-flip>
+        <div class="rec-inner">
+          <div class="rec-face front">
+            {% if movie.poster_url %}
+              <img class="movie-poster" src="{{ movie.poster_url }}" alt="Poster de {{ movie.title }}" style="width:100%;aspect-ratio:2/3;" />
+            {% endif %}
+            <h3>{{ movie.title }}</h3>
+            <div class="muted">{{ movie.year }} · Rating {{ movie.rating or "N/D" }}</div>
+            <div class="genres" style="margin:6px 0;">
+              {% for genre in movie.genres[:3] %}
+                <span class="pill">{{ genre }}</span>
+              {% endfor %}
+            </div>
+            <div class="score">Relevancia: {{ "%.3f"|format(score) }}</div>
+            <div class="flip-hint">Haz click para ver detalle</div>
+          </div>
+          <div class="rec-face back">
+            <h3>{{ movie.title }}</h3>
+            <div class="breakdown">
+              <div><span class="label">Afinidad géneros:</span> <span class="badge affinity">{{ "%.2f"|format(detail.affinity) }}</span></div>
+              <div><span class="label">Similitud rating:</span> <span class="badge rating">{{ "%.2f"|format(detail.rating_similarity) }}</span></div>
+              <div><span class="label">Popularidad:</span> <span class="badge popularity">{{ "%.2f"|format(detail.popularity_norm) }}</span></div>
+              <div><span class="label">Penalización:</span> {{ "%.2f"|format(detail.penalty) }}</div>
+              <div><span class="label">Score final:</span> <strong>{{ "%.3f"|format(detail.final) }}</strong></div>
+            </div>
+            <form method="post" class="rating-row" data-rating-group style="margin-top:10px;">
+              <input type="hidden" name="movie_id" value="{{ movie.id }}">
+              <input type="hidden" name="score" value="3">
+              <span class="muted">¿Qué tan afin te resultó esta película?</span>
+              <div class="thumb-scale">
+                {% for val in range(1,6) %}
+                  <button type="submit" class="thumb-btn" data-rating-value="{{ val }}" aria-label="{{ val }} de 5">
+                    <span class="face-icon face-{{ val }}"></span>
+                  </button>
+                {% endfor %}
+              </div>
+            </form>
+            <div class="flip-hint">Click para volver</div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div style="margin-top: 18px;">
+    <a class="btn btn-like" style="display:inline-block;padding:12px 16px;" href="{{ url_for('start') }}">Nueva sesión</a>
+  </div>
+{% endblock %}

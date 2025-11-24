@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="progress">
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: {{ (progress.current / progress.target) * 100 }}%;"></div>
+    </div>
+    <div class="muted">{{ progress.current }} / {{ progress.target }} valoraciones válidas</div>
+  </div>
+
+  <div class="movie-hero">
+    <div>
+      {% if movie.poster_url %}
+        <img class="movie-poster" src="{{ movie.poster_url }}" alt="Poster de {{ movie.title }}" />
+      {% else %}
+        <div class="movie-poster" style="display:flex;align-items:center;justify-content:center;color:var(--muted);">Sin póster</div>
+      {% endif %}
+    </div>
+    <div>
+      <h2 style="margin: 0 0 8px;">{{ movie.title }}</h2>
+      <div class="muted">{{ movie.year }} · Popularidad {{ "%.1f"|format(movie.popularity) }} · Rating {{ movie.rating or "N/D" }}</div>
+      <div class="genres">
+        {% for genre in movie.genres %}
+          <span class="pill">{{ genre }}</span>
+        {% endfor %}
+      </div>
+
+      <form method="post">
+        <input type="hidden" name="movie_id" value="{{ movie.id }}" />
+        <input type="hidden" name="decision" value="{{ like_value }}" />
+        <input type="hidden" name="score" value="3" />
+
+        <div class="rating-row" data-rating-group>
+          <span class="muted">¿Qué tan parecida quieres que sea la recomendación?</span>
+          <div class="thumb-scale">
+            {% for val in range(1,6) %}
+              <button type="submit" class="thumb-btn" data-rating-value="{{ val }}" aria-label="{{ val }} de 5">
+                <span class="face-icon face-{{ val }}"></span>
+              </button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="buttons">
+          <button type="submit" class="btn btn-skip" name="decision" value="{{ skip_value }}">No la vi</button>
+        </div>
+      </form>
+
+      <div style="margin-top:16px; text-align:center;">
+        {% if remaining_for_recs > 0 %}
+          <button class="btn btn-cta" disabled title="Debes validar al menos {{ remaining_for_recs }} película(s) más">
+            Ver recomendaciones
+          </button>
+        {% else %}
+          <a class="btn btn-cta btn-cta-active" href="{{ url_for('results') }}">Ver recomendaciones</a>
+        {% endif %}
+        <p class="muted" style="margin-top:8px;">Mientras más películas valides, mejor será la recomendación final.</p>
+      </div>
+    </div>
+  </div>
+{% endblock %}

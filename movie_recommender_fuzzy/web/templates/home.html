@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    <h2 style="margin:0;">Descubre qué ver con menos scroll y más aciertos</h2>
+    <p class="muted">Califica 20 títulos rápidos, ajusta filtros y recibe 10 recomendaciones transparentes con lógica borrosa.</p>
+    <div style="margin-top: 10px; display:flex; gap:10px; flex-wrap:wrap;">
+      <a class="btn btn-like" style="display: inline-block; padding: 12px 18px;" href="{{ url_for('filters') }}">Configurar filtros y empezar</a>
+      {% if session %}
+        <a class="btn btn-skip" style="display: inline-block; padding: 10px 14px;" href="{{ url_for('swipe') }}">Continuar sesión ({{ session.valid_ratings_count }}/{{ session.target_ratings }})</a>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

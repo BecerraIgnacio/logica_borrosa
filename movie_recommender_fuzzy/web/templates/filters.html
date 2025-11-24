@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2 style="margin-top:0;">Configurar filtros iniciales</h2>
+  <p class="muted">Estos filtros determinan las 20 películas que verás primero.</p>
+
+  <form method="post">
+    <div style="margin:12px 0;">
+      <h3>Géneros</h3>
+      <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:8px;">
+        {% for genre in genres %}
+          <label class="pill" style="cursor:pointer;">
+            <input type="checkbox" name="genres" value="{{ genre }}" {% if genre in selected_genres %}checked{% endif %} />
+            {{ genre }}
+          </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div style="margin:12px 0;">
+      <h3>Duración</h3>
+      <select name="duration" class="btn btn-skip" style="width:200px;">
+        <option value="" {% if selected_duration == "" %}selected{% endif %}>Sin filtro</option>
+        <option value="short" {% if selected_duration == "short" %}selected{% endif %}>&lt; 100 min</option>
+        <option value="medium" {% if selected_duration == "medium" %}selected{% endif %}>100–140 min</option>
+        <option value="long" {% if selected_duration == "long" %}selected{% endif %}>&gt; 140 min</option>
+      </select>
+    </div>
+
+    <div style="margin-top:16px;">
+      <button type="submit" class="btn btn-like">Guardar y empezar</button>
+    </div>
+  </form>
+{% endblock %}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title or "Movie Recommender Fuzzy" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Movie Recommender Fuzzy</h1>
+        <div>
+          <a href="{{ url_for('home') }}">Inicio</a>
+          {% if session %} · <span class="muted">Sesión {{ session.id }}</span>{% endif %}
+        </div>
+      </header>
+      <main class="card">
+        {% block content %}{% endblock %}
+      </main>
+      <footer>20 valoraciones iniciales → 10 recomendaciones personalizadas</footer>
+    </div>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  </body>
+  </html>
