@@ -116,6 +116,7 @@ class FuzzyEngine:
             "fuzzy_popularity": f_pop,
             "fuzzy_rating": f_rat,
             "output_strengths": output_strengths,
+            "penalty": 1.0,  # sin penalización adicional en esta versión
             "final": final,
         }
         return final, breakdown
